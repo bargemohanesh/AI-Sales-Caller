@@ -85,7 +85,7 @@ def make_call():
         call = client.calls.create(
             twiml=f'''<?xml version="1.0" encoding="UTF-8"?>
             <Response>
-                <Gather input="speech" action="/process" method="POST" timeout="5">
+                <Gather input="speech" action="https://ai-sales-caller-b8p7.onrender.com/process" method="POST" timeout="5">
                     <Say>Hello, this is your AI Sales Assistant! Would you like to know about our courses or book a demo?</Say>
                 </Gather>
                 <Say>Sorry, I didn't hear anything. Goodbye.</Say>
