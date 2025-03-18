@@ -17,9 +17,8 @@ from dotenv import load_dotenv
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
-import os
 import json
-
+import base64
 
 
 # Load environment variables
@@ -39,15 +38,21 @@ client = Client(account_sid, auth_token)
 
 # Google Calendar API Setup
 SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
-# Handle credentials dynamically for local and Render environments
+
+# Path for storing Google credentials
+CREDENTIALS_FILE = "/tmp/client_secret.json"
+TOKEN_FILE = "/tmp/token.pickle"
+
+# Save Google Credentials JSON
 if "GOOGLE_CREDENTIALS_JSON" in os.environ:
-    CREDENTIALS_FILE = "/tmp/client_secret_853349819074-5afkt8v8ce9k17setl98t11klg18pi0s.apps.googleusercontent.com.json"
     with open(CREDENTIALS_FILE, "w") as file:
         file.write(os.environ["GOOGLE_CREDENTIALS_JSON"])
-else:
-    CREDENTIALS_FILE = os.getenv("GOOGLE_CREDENTIALS_FILE")
 
-TOKEN_FILE = os.getenv("GOOGLE_TOKEN_FILE")
+# Decode and save Google Token
+if "GOOGLE_TOKEN_BASE64" in os.environ:
+    with open(TOKEN_FILE, "wb") as file:
+        file.write(base64.b64decode(os.environ["GOOGLE_TOKEN_BASE64"]))
+
 
 def authenticate_google():
     creds = None
